@@ -1,5 +1,33 @@
 package jm.task.core.jdbc.util;
 
+import jm.task.core.jdbc.model.User;
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.Configuration;
+
 public class Util {
-    // реализуйте настройку соеденения с БД
+    private final String URL = "jdbc:mysql://localhost:3306/preproject_1.1.4";
+    private final String USER = "admin";
+    private final String PASSWORD = "admin";
+    private final SessionFactory sessionFactory;
+    private static volatile Util instance;
+
+    public static Util getInstance() {
+        if (instance == null) {
+            synchronized (Util.class) {
+                if (instance == null) {
+                    instance = new Util();
+                }
+            }
+        }
+        return instance;
+    }
+
+    public Util() {
+        Configuration configuration = new Configuration().addAnnotatedClass(User.class);
+        sessionFactory = configuration.buildSessionFactory();
+    }
+
+    public SessionFactory getSessionFactory() {
+        return sessionFactory;
+    }
 }
