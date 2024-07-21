@@ -5,9 +5,6 @@ import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
 public class Util {
-    private final String URL = "jdbc:mysql://localhost:3306/preproject_1.1.4";
-    private final String USER = "admin";
-    private final String PASSWORD = "admin";
     private final SessionFactory sessionFactory;
     private static volatile Util instance;
 

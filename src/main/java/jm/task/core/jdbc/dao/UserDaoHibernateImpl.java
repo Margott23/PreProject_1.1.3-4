@@ -8,9 +8,9 @@ import org.hibernate.query.Query;
 import java.util.List;
 
 public class UserDaoHibernateImpl implements UserDao {
-    final static String CREATE_NEW_TABLE = "CREATE TABLE IF NOT EXISTS users (id int primary key auto_increment, name varchar(45), lastName varchar(45), age int)";
-    final static String DROP_TABLE = "DROP TABLE IF EXISTS users";
-    final static String CLEAN_USER_TABLE = "DELETE FROM users";
+    private String CREATE_NEW_TABLE = "CREATE TABLE IF NOT EXISTS users (id int primary key auto_increment, name varchar(45), lastName varchar(45), age int)";
+    private String DROP_TABLE = "DROP TABLE IF EXISTS users";
+    private String CLEAN_USER_TABLE = "DELETE FROM users";
 
     public UserDaoHibernateImpl() {
     }
