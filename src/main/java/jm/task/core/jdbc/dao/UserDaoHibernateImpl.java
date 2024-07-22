@@ -2,6 +2,7 @@ package jm.task.core.jdbc.dao;
 
 import jm.task.core.jdbc.model.User;
 import jm.task.core.jdbc.util.Util;
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 
@@ -23,6 +24,8 @@ public class UserDaoHibernateImpl implements UserDao {
             query.executeUpdate();
             System.out.println("Table created successful");
             session.getTransaction().commit();
+        } catch (HibernateException e) {
+            System.out.println("UserDaoHibernateImpl exception: method createUsersTable");
         }
     }
 
@@ -34,6 +37,8 @@ public class UserDaoHibernateImpl implements UserDao {
             query.executeUpdate();
             System.out.println("Table drop successful");
             session.getTransaction().commit();
+        } catch (HibernateException e) {
+            System.out.println("UserDaoHibernateImpl exception: method dropUsersTable");
         }
     }
 
@@ -44,6 +49,8 @@ public class UserDaoHibernateImpl implements UserDao {
             session.save(new User(name, lastName, age));
             System.out.printf("User %s successful added\n", name);
             session.getTransaction().commit();
+        } catch (HibernateException e) {
+            System.out.println("UserDaoHibernateImpl exception: method saveUser");
         }
     }
 
@@ -55,6 +62,8 @@ public class UserDaoHibernateImpl implements UserDao {
             session.delete(user);
             System.out.println("User removed successful");
             session.getTransaction().commit();
+        } catch (HibernateException e) {
+            System.out.println("UserDaoHibernateImpl exception: method removeUserById");
         }
     }
 
@@ -65,10 +74,13 @@ public class UserDaoHibernateImpl implements UserDao {
             session.beginTransaction();
             Query query = session.createQuery("FROM User", User.class);
             users = query.getResultList();
+            System.out.println("Get all users successful");
+            System.out.println(users);
+            return users;
+        } catch (HibernateException e) {
+            System.out.println("UserDaoHibernateImpl exception: method getAllUsers");
         }
-        System.out.println("Get all users successful");
-        System.out.println(users);
-        return users;
+        return null;
     }
 
     @Override
@@ -79,6 +91,8 @@ public class UserDaoHibernateImpl implements UserDao {
             query.executeUpdate();
             System.out.println("Table clean successful");
             session.getTransaction().commit();
+        } catch (HibernateException e) {
+            System.out.println("UserDaoHibernateImpl exception: method cleanUsersTable");
         }
     }
 }
