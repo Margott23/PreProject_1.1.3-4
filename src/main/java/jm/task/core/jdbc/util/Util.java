@@ -24,6 +24,7 @@ public class Util {
 
     public Util() { // for JDBC
         try {
+            DriverManager.registerDriver(new com.mysql.cj.jdbc.Driver());
             connection = DriverManager.getConnection(URL, USER, PASSWORD);
             if (!connection.isClosed() || connection != null) {
                 System.out.println("Connection established");
