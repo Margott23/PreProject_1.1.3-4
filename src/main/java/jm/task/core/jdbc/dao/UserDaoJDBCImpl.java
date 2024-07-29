@@ -3,13 +3,9 @@ package jm.task.core.jdbc.dao;
 import jm.task.core.jdbc.model.User;
 import jm.task.core.jdbc.util.Util;
 
-import java.sql.Statement;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-
 
 public class UserDaoJDBCImpl implements UserDao {
 
@@ -30,25 +26,38 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void dropUsersTable() {
-        try (PreparedStatement preparedStatement = Util.getInstance().getConnection().prepareStatement("DROP TABLE IF EXISTS users")) {
+        try (Connection connection = Util.getInstance().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement("DROP TABLE IF EXISTS users")) {
             preparedStatement.executeUpdate();
             System.out.println("Table drop successful");
         } catch (SQLException e) {
-            System.err.println("UserDaoJDBCImpl error: method dropUsersTable" + e.getMessage());
+            System.err.println("UserDaoJDBCImpl error: method dropUsersTable");
         }
     }
 
     public void saveUser(String name, String lastName, byte age) {
-        try (PreparedStatement preparedStatement = Util.getInstance().getConnection().prepareStatement("INSERT INTO users (name, lastName, age) VALUES (?,?,?)")) {
-            Util.getInstance().getConnection().setAutoCommit(false);
+        Connection connection = Util.getInstance().getConnection();
+        try (PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO users (name, lastName, age) VALUES (?,?,?)")) {
+            connection.setAutoCommit(false);
             preparedStatement.setString(1, name);
             preparedStatement.setString(2, lastName);
             preparedStatement.setByte(3, age);
             preparedStatement.executeUpdate();
             System.out.printf("User %s successful added\n", name);
-            Util.getInstance().getConnection().commit();
+            connection.commit();
         } catch (SQLException e) {
+            try {
+                connection.rollback();
+            } catch (SQLException ex) {
+                System.err.println("Connection rollback failed");
+            }
             System.err.println("UserDaoJDBCImpl error: method saveUser");
+        }
+
+        try {
+            connection.close();
+        } catch (SQLException e) {
+            System.out.println("Connection close failed");
         }
     }
 
