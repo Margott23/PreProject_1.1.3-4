@@ -9,9 +9,6 @@ import org.hibernate.query.Query;
 import java.util.List;
 
 public class UserDaoHibernateImpl implements UserDao {
-    private String CREATE_NEW_TABLE = "CREATE TABLE IF NOT EXISTS users (id int primary key auto_increment, name varchar(45), lastName varchar(45), age int)";
-    private String DROP_TABLE = "DROP TABLE IF EXISTS users";
-    private String CLEAN_USER_TABLE = "DELETE FROM users";
 
     public UserDaoHibernateImpl() {
     }
@@ -20,7 +17,8 @@ public class UserDaoHibernateImpl implements UserDao {
     public void createUsersTable() {
         try (Session session = Util.getInstance().getSessionFactory().openSession()) {
             session.beginTransaction();
-            Query query = session.createSQLQuery(CREATE_NEW_TABLE);
+            Query query = session.createSQLQuery("CREATE TABLE IF NOT EXISTS users " +
+                    "(id int primary key auto_increment, name varchar(45), lastName varchar(45), age int)");
             query.executeUpdate();
             System.out.println("Table created successful");
             session.getTransaction().commit();
@@ -33,7 +31,7 @@ public class UserDaoHibernateImpl implements UserDao {
     public void dropUsersTable() {
         try (Session session = Util.getInstance().getSessionFactory().openSession()) {
             session.beginTransaction();
-            Query query = session.createSQLQuery(DROP_TABLE);
+            Query query = session.createSQLQuery("DROP TABLE IF EXISTS users");
             query.executeUpdate();
             System.out.println("Table drop successful");
             session.getTransaction().commit();
@@ -87,7 +85,7 @@ public class UserDaoHibernateImpl implements UserDao {
     public void cleanUsersTable() {
         try (Session session = Util.getInstance().getSessionFactory().openSession()) {
             session.beginTransaction();
-            Query query = session.createSQLQuery(CLEAN_USER_TABLE);
+            Query query = session.createSQLQuery("DELETE FROM users");
             query.executeUpdate();
             System.out.println("Table clean successful");
             session.getTransaction().commit();
