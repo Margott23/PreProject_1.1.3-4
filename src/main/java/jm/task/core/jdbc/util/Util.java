@@ -6,7 +6,6 @@ import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
 public class Util {
-//    private final SessionFactory sessionFactory;
     private static volatile Util instance;
 
     public static Util getInstance() {
@@ -20,11 +19,12 @@ public class Util {
         return instance;
     }
 
-    public Util() {
+    private Util() {
     }
 
     private SessionFactory openSessionFactory() {
         Configuration configuration = new Configuration().addAnnotatedClass(User.class);
+        System.out.println("SessionFactory creating..." + !configuration.getProperties().isEmpty());
         return configuration.buildSessionFactory();
     }
 
