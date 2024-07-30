@@ -6,10 +6,9 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class Util {
-    private static final String URL = "jdbc:mysql://localhost:3306/preproject_1.1.4";
-    private static final String USER = "admin";
-    private static final String PASSWORD = "admin";
-//    private Connection connection;
+    private final String URL = "jdbc:mysql://localhost:3306/preproject_1.1.4";
+    private final String USER = "admin";
+    private final String PASSWORD = "admin";
     private static volatile Util instance;
 
     public static Util getInstance() {
@@ -23,16 +22,14 @@ public class Util {
         return instance;
     }
 
-    public Util() { // for JDBC
+    private Util() {
     }
 
     private Connection openConnection() {
         try {
-            Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
             DriverManager.registerDriver(new com.mysql.cj.jdbc.Driver());
-            if (!connection.isClosed() || connection != null) {
-                System.out.println("Connection established");
-            }
+            Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
+            System.out.println("Connection established: " + !connection.isClosed());
             return connection;
         } catch (SQLException e) {
             throw new RuntimeException(e);
