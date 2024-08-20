@@ -10,7 +10,6 @@ public class UserServiceImpl implements UserService {
 
     private UserDao userDao = new UserDaoJDBCImpl();
 
-
     @Override
     public void createUsersTable() {
         userDao.createUsersTable();
